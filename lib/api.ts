@@ -39,7 +39,7 @@ export const fetchNotes = async (
     const requestParams: Record<string, string | number | undefined> = {
         page: params.page,
         perPage: params.perPage,
-        search: params.search,
+        ...(params.search ? { search: params.search } : {}),
         ...(params.tag ? {tag: params.tag} : {}),
     };
     const response: AxiosResponse<FetchNotesResponse> = await notesApi.get("/notes", {params: requestParams,});
