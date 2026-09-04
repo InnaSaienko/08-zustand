@@ -14,3 +14,9 @@ export interface Note {
 }
 
 export type NoteFormData = Omit<Note, "id"| "createdAt" | "updatedAt" >
+
+export interface NewNote {
+  title: string;
+  content: string;
+  tag: NoteTag;
+}

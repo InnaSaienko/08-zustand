@@ -10,9 +10,8 @@ import Pagination from "@/components/Pagination/Pagination";
 import Loader from "@/components/Loader/Loader";
 import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import NoteList from "@/components/NoteList/NoteList";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
 import {NoteTag} from "@/types/note";
+import Link from "next/link";
 
 
 interface NotesClientParams {
@@ -23,7 +22,6 @@ const PER_PAGE = 12;
 const NotesClient = ({tag}: NotesClientParams) => {
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {data, isLoading, isError} = useQuery({
         queryKey: ['notes', page, search, tag ?? "all"],
@@ -46,9 +44,9 @@ const NotesClient = ({tag}: NotesClientParams) => {
             <header className={css.toolbar}>
                 <SearchBox onSearch={handleSearch}/>
                 {totalPages > 1 && <Pagination totalPages={totalPages} currentPage={page} onPageChange={setPage}/>}
-                <button className={css.button} onClick={() => setIsModalOpen(true)}>
+                <Link className={css.button} href="/notes/action/create">
                     Create note +
-                </button>
+                </Link>
             </header>
             <main className={css.main}>
                 {isLoading && <Loader/>}
@@ -57,11 +55,6 @@ const NotesClient = ({tag}: NotesClientParams) => {
                 {!isLoading && !isError && notes.length === 0 && <p className={css.empty}>No notes found.</p>}
                 {!isLoading && !isError && <NoteList notes={notes}/>}
             </main>
-            {isModalOpen && (
-                <Modal onClose={() => setIsModalOpen(false)}>
-                    <NoteForm onSuccessSubmit={() => setIsModalOpen(false)}/>
-                </Modal>
-            )}
         </div>
     );
 };
